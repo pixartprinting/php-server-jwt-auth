@@ -1,5 +1,5 @@
 {
-    "name": "raju-cimpress/php-server-jwt-auth",
+    "name": "pixartprinting/php-server-jwt-auth",
     "description": "PHP library for supporting Cimpress and Auth0 JWT on server side",
     "type": "library",
     "require": {

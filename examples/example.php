@@ -24,8 +24,8 @@ $config = new \CimpressJwtAuth\Auth\Configuration(
     $cache,
     86400,
     [
-        "issuer_domain_url_1",
-        "issuer_domain_url_2"
+        "<issuer_domain_url_1>",
+        "<issuer_domain_url_2>"
     ]
 );
 
