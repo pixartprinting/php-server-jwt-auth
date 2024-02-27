@@ -94,9 +94,12 @@ class JwtVerifier
             throw new JwtException($this, [$e->getMessage()], "Unexpected server error", 500, $e);
         }
 
-        if (empty($this->payload["iss"]) || !in_array($this->payload["iss"], $this->config->getAllowedAuthIssuers())) {
-            throw new JwtException($this, ["Unsupported issuer"], "Unauthorised", 401);
+        if (!empty($this->config->getAllowedAuthIssuers())) {
+            if (empty($this->payload["iss"]) || !in_array($this->payload["iss"], $this->config->getAllowedAuthIssuers())) {
+                throw new JwtException($this, ["Unsupported issuer"], "Unauthorised", 401);
+            }
         }
+
         return $this;
     }
 
