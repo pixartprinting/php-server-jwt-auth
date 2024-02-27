@@ -21,12 +21,12 @@ $cache = new \Symfony\Component\Cache\Adapter\ApcuAdapter(
 
 $config = new \CimpressJwtAuth\Auth\Configuration(
     "<jwks_uri>",
+    $cache,
+    86400,
     [
         "<issuer_domain_url_1>",
         "<issuer_domain_url_2>"
-    ],
-    $cache,
-    86400
+    ]
 );
 
 $jwtVerifyer = new \CimpressJwtAuth\Auth\JwtVerifier($config);
