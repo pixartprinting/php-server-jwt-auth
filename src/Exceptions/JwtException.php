@@ -31,7 +31,7 @@ class JwtException extends \Exception
             'success' => 0,
             'error' => [
                 "msg" => $this->getMessage(),
-                "errors" => $this->getErrors(),
+                "detail" => $this->getErrors(),
                 "code" => $this->getCode()
             ]
         ];
