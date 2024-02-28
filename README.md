@@ -122,4 +122,4 @@ try {
 }
 ```
 
-You can refer [examples\example.php](examples\example.php) too.
+You can refer [examples/example.php](examples/example.php) too.
