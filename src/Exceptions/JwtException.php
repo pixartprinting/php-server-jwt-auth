@@ -11,7 +11,7 @@ class JwtException extends \Exception
         protected array $errors,
         protected $message,
         protected $code = 0,
-        \Throwable $previous = null)
+        ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
