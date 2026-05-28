@@ -4,11 +4,11 @@ PHP library for supporting Cimpress and Auth0 JWT on server side
 
 ## Dependencies
 
-* PHP >= 8.1
-* ext-json: *,
-* firebase/php-jwt: ^6.8
-* psr/cache: ^2.0.0
-* guzzlehttp/guzzle: ^7.7.0
+- PHP >= 8.1
+- ext-json: \*,
+- firebase/php-jwt: ^7.0
+- psr/cache: ^2.0.0
+- guzzlehttp/guzzle: ^7.7.0
 
 ## Installation via Composer
 
@@ -30,14 +30,17 @@ PHP library for supporting Cimpress and Auth0 JWT on server side
 
 `CimpressJwtAuth\Auth\JwtVerifier` is the main class which decodes and validate the token and provides header and payload after successfully validating the token.
 `JwtVerifier` class provides three public functions
+
 1. `decode(string $token): JwtVerifier`: Takes incoming token validates it and forces issuer check in the token.
 2. `getHeaders(): array`: This function returns associative array containing decoded token headers as key value pair. Function `decode(string $token)` should be called before using this function.
 3. `getPayload(): array`: This function returns associative array containing decoded token body as key value pair. Function `decode(string $token)` should be called before using this function.
 
 ### Create configuration object
+
 Constructor of `CimpressJwtAuth\Auth\JwtVerifier` class takes in `CimpressJwtAuth\Auth\Configuration` object.
 
-Hence to use `JwtVerifier` you need to create first `Configuration` object. Below are parameters needed in the constructor of `Configuration` class. 
+Hence to use `JwtVerifier` you need to create first `Configuration` object. Below are parameters needed in the constructor of `Configuration` class.
+
 1. `string $jwksUri`: Url of the jwks file for verifying the signatures
 2. `CacheItemPoolInterface $cache`: Object of cache adaptor class implementing interface `Psr\Cache\CacheItemPoolInterface` for caching jwsk file keys to prevent jwks file content every time.
 3. `int $jwksExpiresAfter`: Expiry time of JWKS file cache. Default is 24 hours.
@@ -78,7 +81,7 @@ try {
     $jwtVerifyer->decode($token);
     echo "\nCode: 200";
 
-    //getHeaders() returns associative array containing decoded token headers as key value pair. 
+    //getHeaders() returns associative array containing decoded token headers as key value pair.
     echo "\nHeader: ".json_encode($jwtVerifyer->getHeaders());
 
     //getPayload() returns associative array containing decoded token payload as key value pair.
@@ -89,20 +92,35 @@ try {
 }
 ```
 
+### Decode token with known public key + kid
+
+```php
+$decoder = new \CimpressJwtAuth\Auth\PublicKeyTokenDecoder();
+
+$payload = $decoder->decode(
+  $token,
+  '<jwt_public_key_pem>',
+  '<jwt_public_key_id>'
+);
+
+echo $payload->email;
+```
+
 ### Catch exceptions
+
 `JwtVerifier:decode()` function throws exception of class `CimpressJwtAuth\Exceptions\JwtException` if fails to validate and decode the token.
 
 ```php
 try {
     $jwtVerifyer->decode($token);
 } catch (\CimpressJwtAuth\Exceptions\JwtException $exception) {
-    
+
     //getCode() return which can be directly used as HTTP status
     echo "\nCode: {$exception->getCode()}";
-    
+
     //getMessage() returns one line message for the exception
     echo "\nMessage: {$exception->getMessage()}";
-    
+
     //getErrors() returns array of messages with details which can be used internally by the application.
     //Avoid exposing these detailed messages in your reposnse
     echo "\nDetail Error Messages: ".print_r($exception->getErrors(), true);;
