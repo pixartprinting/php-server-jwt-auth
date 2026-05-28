@@ -12,8 +12,6 @@ use DomainException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\HttpFactory;
 use InvalidArgumentException;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
 use UnexpectedValueException;
 
 class JwtVerifier
@@ -26,9 +24,7 @@ class JwtVerifier
      *
      */
     public function __construct(
-        private readonly Configuration $config,
-        private readonly ?ClientInterface $httpClient = null,
-        private readonly ?RequestFactoryInterface $httpFactory = null
+        private readonly Configuration $config
     ) {
     }
 
@@ -48,10 +44,10 @@ class JwtVerifier
             $jwksUri = $this->config->getJwksUri();
 
             // Create an HTTP client (can be any PSR-7 compatible HTTP client)
-            $httpClient = $this->httpClient ?? new Client();
+            $httpClient = new Client();
 
             // Create an HTTP request factory (can be any PSR-17 compatible HTTP request factory)
-            $httpFactory = $this->httpFactory ?? new HttpFactory();
+            $httpFactory = new HttpFactory();
 
             // Create a cache item pool (can be any PSR-6 compatible cache item pool)
             $cacheItemPool = $this->config->getJwksCache();
@@ -61,7 +57,7 @@ class JwtVerifier
                 $httpClient,
                 $httpFactory,
                 $cacheItemPool,
-                $this->config->getJwksExpiresAfter(), // $expiresAfter int seconds to set the JWKS to expire
+                null, // $expiresAfter int seconds to set the JWKS to expire
                 true  // $rateLimit    true to enable rate limit of 10 RPS on lookup of invalid keys
             );
 
